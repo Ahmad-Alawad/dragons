@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>All Dragons</h1>
+<!-- <h1>All Dragons</h1>
 <ul>
     {% for dragon in all_dragons %}
         <li>
@@ -9,6 +9,58 @@
             <h5>{{ dragon.places.place_name }}</h5>
         </li>
 	{% endfor %}
-</ul>  
+</ul>   -->
+
+
+<h1>All Dragons</h1>
+{% for dragon in all_dragons %}
+    <h5>{{ dragon.dragon_name }}</h5>
+    <form action="/change_place" method="POST">
+        {% for place in all_places %}
+            {% if dragon.places.place_name == place.place_name %}
+                <input type="radio" name="place" value="{{ place.place_name}}" class="radio" checked> {{ place.place_name}}
+            {% else %}
+                <input type="radio" name="place" value="{{ place.place_name}}" class="radio"> {{ place.place_name}}
+            {% endif %}
+        {% endfor %}
+        <button type="button" class="change_button" value="{{ dragon.dragon_id }}">Change Place</button>
+    </form>
+{% endfor %}
+
+<script>
+    $(document).ready(function() {
+       $(".change_button").click(function(e){
+        
+        e.preventDefault(); // To prevent the default behavior in flask server
+        var draginID = this.value;
+        var parentElement = this.closest("form");
+        console.log("Closest form", parentElement);
+        var allRadios = parentElement.children;
+        console.log("All radios", allRadios);
+        var selectedRadioValue;
+        
+        for (var i = 0; allRadios < allRadios.length; i++) {
+            if (allRadios[i].class == "radio" && allRadios[i].checked){
+                selectedRadioValue = allRadios[i].value;
+            }
+        }
+
+
+        // console.log(draginID);
+        $.ajax({
+            url: "/change_place",
+            type: "POST",
+            data: {dragon_id:draginID, selected_place:selectedRadioValue},
+            success: function(response) {
+                console.log("Success!!!!!!")
+            },
+            error: function(xhr) {
+                console.log("Failed");
+            }
+        });
+       });
+    });
+ </script>
+
 
 {% endblock %}

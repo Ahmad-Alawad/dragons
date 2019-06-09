@@ -10,8 +10,20 @@ app.secret_key = "ABC"
 @app.route("/dashboard")
 def dashboard():
     all_dragons = Dragon.query.all()
-    # all_places = Place.query.all()
-    return render_template("dashboard.html", all_dragons=all_dragons)
+    all_places = Place.query.all()
+    return render_template("dashboard.html", all_dragons=all_dragons, all_places=all_places)
+
+
+@app.route("/change_place", methods=['POST'])
+def change_place():
+    """ This will be used to change the place of the dragon """
+    dragon_id = request.form["dragon_id"]
+    selected_place = request.form["selected_place"]
+    print "\n\n\n\n After processing POST"
+    # Some other stuff need to be done here
+    # It also gives 400 for now
+    return redirect("/dashboard")
+
 
 
 if __name__ == "__main__":
