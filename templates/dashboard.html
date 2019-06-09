@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>All Dragons</h1>
+<ul>
+    {% for dragon in all_dragons %}
+        <li>
+            <h5>{{ dragon.dragon_name }}</h5>
+            <h5>{{ dragon.places.place_name }}</h5>
+        </li>
+	{% endfor %}
+</ul>  
+
+{% endblock %}
